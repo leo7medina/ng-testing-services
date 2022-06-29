@@ -39,6 +39,15 @@ describe('Test for calculator', () => {
 
     });
 
+    it('#divide for a zero', () => {
+        //Arrange
+        const calculator = new Calculator();
+        //Act
+        expect(calculator.divide(6,0)).toBeNull();
+        expect(calculator.divide(5,0)).toBeNull();
+
+    });
+
     it('#test matchers', () => {
         const name = 'Leonardo';
         let name2;
@@ -46,7 +55,7 @@ describe('Test for calculator', () => {
         expect(name).toBeDefined();
         expect(name2).toBeUndefined();
 
-        expect(1 + 3 === 3).toBeTruthy();
+        expect(1 + 3 === 4).toBeTruthy();
         expect(1 + 1 === 3).toBeFalsy();
 
         expect(5).toBeLessThan(10);
