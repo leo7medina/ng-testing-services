@@ -1,11 +1,15 @@
 import { ValueService } from './value.service';
+import { TestBed } from '@angular/core/testing';
 
 describe('Test ValueService', () => {
 
     let service: ValueService;
 
   beforeEach(() => {
-    service = new ValueService();
+    TestBed.configureTestingModule({
+        providers: [ ValueService ]
+      });
+      service = TestBed.inject(ValueService);
   });
 
   it('should be create', () => {
@@ -39,6 +43,17 @@ describe('Test ValueService', () => {
     it('should return "promise value" from promise using async', async () => {
       const rta = await service.getPromiseValue();
       expect(rta).toBe('promise value');
+    });
+  });
+
+  describe('Tests for getObservableValue', () => {
+    it('should return "observable value" from observable', (doneFn) => {
+      service.getObservableValue()
+      .subscribe((value) => {
+        // assert
+        expect(value).toBe('observable value');
+        doneFn();
+      });
     });
   });
 });
