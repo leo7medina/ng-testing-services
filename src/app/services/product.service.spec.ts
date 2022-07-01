@@ -5,6 +5,9 @@ import { Product } from '../models/product.model';
 
 import { ProductService } from './product.service';
 
+import { generateManyProducts } from '../models/product.mock';
+
+
 fdescribe('ProductService', () => {
   let service: ProductService;
   let httpController: HttpTestingController;
@@ -27,25 +30,13 @@ fdescribe('ProductService', () => {
   describe('Test for getAllsimple', () => {
     it('should return a product list', (doneFn) => {
       //Arrage
-      const mokData: Product[] = [
-        {
-          id: '123',
-          title: 'title',
-          price: 12,
-          description: 'blaaaaa',
-          category: {
-            id: 12,
-            name: 'category 1'
-          },
-          images: ['img', 'pdf']
-        }
-      ];
+      const mokData: Product[] = generateManyProducts(2);
       //Act
-      service.getAll()
+      service.getAllSimple()
         .subscribe((data)=> {
           //Assert
           expect(data.length).toEqual(mokData.length);
-          expect(data).toEqual(data);
+          expect(data).toEqual(mokData);
           doneFn();
         });
       //http config
