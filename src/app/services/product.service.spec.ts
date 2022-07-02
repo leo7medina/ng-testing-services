@@ -4,24 +4,31 @@ import { environment } from 'src/environments/environment';
 import { CreateProductDTO, Product, UpdateProductDTO } from '../models/product.model';
 
 import { ProductService } from './product.service';
+import { TokenService } from './token.service';
+import { TokenInterceptor } from '../interceptor/token.interceptor';
 
 import { generateManyProducts, generateOneProduct } from '../models/product.mock';
-import { HttpStatusCode } from '@angular/common/http';
+import { HttpStatusCode, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
 fdescribe('ProductService', () => {
   let service: ProductService;
   let httpController: HttpTestingController;
+  let tokenService: TokenService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports:[HttpClientTestingModule],
       providers: [
-        
+        TokenService,
+        {
+          provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true
+        }
       ]
     });
     service = TestBed.inject(ProductService);
     httpController = TestBed.inject(HttpTestingController);
+    tokenService = TestBed.inject(TokenService);
   });
 
   it('should be created', () => {
@@ -36,6 +43,7 @@ fdescribe('ProductService', () => {
     it('should return a product list', (doneFn) => {
       //Arrage
       const mokData: Product[] = generateManyProducts(2);
+      spyOn(tokenService, 'getToken').and.returnValue('123');
       //Act
       service.getAllSimple()
         .subscribe((data)=> {
@@ -47,6 +55,8 @@ fdescribe('ProductService', () => {
       //http config
       const url = `${environment.API_URL}/api/v1/products`;
       const req = httpController.expectOne(url);
+      const headers = req.request.headers;
+      expect(headers.get('Authorization')).toEqual(`Bearer 123`);
       req.flush(mokData);
     });
   });
