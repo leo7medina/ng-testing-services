@@ -11,7 +11,7 @@ import { generateManyProducts, generateOneProduct } from '../models/product.mock
 import { HttpStatusCode, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 
-fdescribe('ProductService', () => {
+describe('ProductService', () => {
   let service: ProductService;
   let httpController: HttpTestingController;
   let tokenService: TokenService;
